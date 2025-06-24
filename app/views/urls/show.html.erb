@@ -1,0 +1,70 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <div class="flex justify-between items-start">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">URL Details</h1>
+          <p class="text-gray-600 mt-2">Sentiment analysis results for this URL</p>
+        </div>
+        <div class="flex gap-2">
+          <%= link_to "Back to URLs", urls_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+          <%= link_to "Edit", edit_url_path(@url), class: "bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6 mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">URL Information</h2>
+      <div class="mb-4">
+        <span class="text-sm font-medium text-gray-700">URL:</span>
+        <a href="<%= @url.url %>" target="_blank" class="text-blue-600 hover:text-blue-800 underline ml-2">
+          <%= @url.url %>
+        </a>
+      </div>
+      <div class="mb-4">
+        <span class="text-sm font-medium text-gray-700">Added:</span>
+        <span class="text-gray-900 ml-2"><%= @url.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+      </div>
+      <div>
+        <span class="text-sm font-medium text-gray-700">Status:</span>
+        <% if @url.analyzed? %>
+          <span class="text-green-600 ml-2">Analyzed</span>
+        <% else %>
+          <span class="text-gray-500 ml-2">Not analyzed</span>
+        <% end %>
+      </div>
+    </div>
+
+    <% if @url.analyzed? %>
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-semibold text-gray-900">Sentiment Analysis Results</h2>
+          <%= button_to "Re-analyze", url_sentiment_analyses_path(@url), method: :post, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+        </div>
+
+        <% @url.sentiment_analyses.recent.each_with_index do |analysis, index| %>
+          <div class="<%= index > 0 ? 'border-t pt-6 mt-6' : '' %>">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-sm font-medium text-gray-700">Sentiment:</span>
+              <span class="px-3 py-1 text-sm font-semibold rounded-full <%= analysis.sentiment_class %>">
+                <%= analysis.sentiment.capitalize %>
+              </span>
+              <span class="text-xs text-gray-500">
+                <%= analysis.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+              </span>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-4">
+              <p class="text-gray-800"><%= analysis.reasoning %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">No Analysis Yet</h2>
+        <p class="text-gray-600 mb-6">This URL hasn't been analyzed for sentiment yet.</p>
+        <%= button_to "Analyze Now", url_sentiment_analyses_path(@url), method: :post, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+      </div>
+    <% end %>
+  </div>
+</div> 

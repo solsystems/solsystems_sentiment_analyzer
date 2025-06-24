@@ -1,0 +1,55 @@
+#!/bin/bash
+set -e
+
+# Remove a potentially pre-existing server.pid for Rails.
+rm -f /app/tmp/pids/server.pid
+
+# Generate SECRET_KEY_BASE if not set
+if [ -z "$SECRET_KEY_BASE" ]; then
+  export SECRET_KEY_BASE=$(openssl rand -hex 64)
+  echo "Generated SECRET_KEY_BASE for production"
+fi
+
+# Debug: Show current directory and list files
+echo "Current working directory: $(pwd)"
+echo "Listing current directory contents:"
+ls -la
+
+# Install missing gems if needed
+bundle check || bundle install
+
+# Run database migrations
+bundle exec rails db:migrate 2>/dev/null || bundle exec rails db:create db:migrate
+
+# Build Tailwind CSS assets if not already present using global tailwindcss
+if [ ! -f "app/assets/builds/tailwind.css" ]; then
+  echo "Building Tailwind CSS assets using global tailwindcss..."
+  echo "Checking if tailwind.config.js exists:"
+  ls -la tailwind.config.js || echo "tailwind.config.js not found"
+  echo "Checking if input file exists:"
+  ls -la app/assets/tailwind/application.css || echo "input file not found"
+  
+  mkdir -p app/assets/builds
+  tailwindcss -c tailwind.config.js -i app/assets/tailwind/application.css -o app/assets/builds/tailwind.css --minify
+  echo "Tailwind CSS assets built successfully"
+else
+  echo "Tailwind CSS assets already built"
+fi
+
+# Precompile assets if not already present
+if [ ! -d "public/assets" ] || [ -z "$(ls -A public/assets 2>/dev/null)" ]; then
+  echo "Precompiling assets..."
+  bundle exec rails assets:precompile
+  echo "Assets precompiled successfully"
+else
+  echo "Assets already precompiled"
+fi
+
+# Ensure the assets manifest exists
+if [ ! -f "public/assets/manifest.json" ]; then
+  echo "Creating assets manifest..."
+  bundle exec rails assets:precompile
+fi
+
+# Then exec the container's main process (what's set as CMD in the Dockerfile).
+exec "$@"

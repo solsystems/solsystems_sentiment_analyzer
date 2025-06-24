@@ -1,0 +1,29 @@
+services:
+  web:
+    build:
+      context: .
+      args:
+        SECRET_KEY_BASE: development_secret_key_base_for_docker_only_change_in_production
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=production
+      - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_LOG_TO_STDOUT=true
+      - DATABASE_URL=sqlite3:/app/db/production.sqlite3
+      - SECRET_KEY_BASE=development_secret_key_base_for_docker_only_change_in_production
+      - OPENAI_API_KEY=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
+    volumes:
+      - ./db:/app/db
+      - ./storage:/app/storage
+      - ./log:/app/log
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  db_data: 
