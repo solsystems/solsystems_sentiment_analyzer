@@ -11,4 +11,13 @@ class Url < ApplicationRecord
   def analyzed?
     sentiment_analyses.exists?
   end
+
+  # Ensure only the most recent analysis is kept
+  def create_single_analysis
+    # Delete any existing analyses for this URL
+    sentiment_analyses.destroy_all
+
+    # Create a new analysis
+    sentiment_analyses.build
+  end
 end

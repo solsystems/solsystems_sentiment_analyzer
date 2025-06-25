@@ -12,6 +12,8 @@ services:
       - RAILS_LOG_TO_STDOUT=true
       - DATABASE_URL=sqlite3:/app/db/production.sqlite3
       - SECRET_KEY_BASE=development_secret_key_base_for_docker_only_change_in_production
+      - OPENAI_API_KEY=
+      - SELENIUM_REMOTE_URL=http://selenium:4444/wd/hub
     volumes:
       - ./db:/app/db
       - ./storage:/app/storage
@@ -23,6 +25,13 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    depends_on:
+      - selenium
+
+  selenium:
+    image: seleniarm/standalone-chromium:latest
+    ports:
+      - "4444:4444"
 
 volumes:
   db_data: 

@@ -1,9 +1,13 @@
 class BulkAnalysisChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "bulk_analysis_#{params[:session_id]}"
+    Rails.logger.info "=== BULK ANALYSIS CHANNEL SUBSCRIBED ==="
+    Rails.logger.info "Streaming from: bulk_analysis"
+
+    stream_from "bulk_analysis"
+    Rails.logger.info "Successfully subscribed to bulk_analysis"
   end
 
   def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
+    Rails.logger.info "=== BULK ANALYSIS CHANNEL UNSUBSCRIBED ==="
   end
 end

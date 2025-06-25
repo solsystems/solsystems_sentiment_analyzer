@@ -20,6 +20,10 @@ gem "dotenv-rails", groups: [:development, :test]
 gem "roo"
 gem "csv"
 gem "openai"
+gem "prawn"
+gem "prawn-table"
+gem "selenium-webdriver"
+gem "webdrivers"
 
 # Caching, background jobs, and other Rails features
 gem "solid_cache"

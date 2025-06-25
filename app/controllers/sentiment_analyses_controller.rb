@@ -2,7 +2,7 @@ class SentimentAnalysesController < ApplicationController
   before_action :set_url, only: [ :create ]
 
   def create
-    @sentiment_analysis = @url.sentiment_analyses.build
+    @sentiment_analysis = @url.create_single_analysis
 
     begin
       @sentiment_analysis.analyze_sentiment

@@ -16,17 +16,24 @@ Rails.application.routes.draw do
   get "urls/bulk_import", to: "urls#bulk_import", as: :bulk_import_urls
   post "urls/process_bulk_import", to: "urls#process_bulk_import", as: :process_bulk_import_urls
 
+  # Bulk analysis route (must come before resources to avoid conflicts)
+  post "urls/bulk_analyze", to: "urls#bulk_analyze", as: :bulk_analyze_urls
+
+  # Bulk delete route (must come before resources to avoid conflicts)
+  delete "urls/delete_all", to: "urls#delete_all", as: :delete_all_urls
+
+  # Export route (must come before resources to avoid conflicts)
+  get "urls/export", to: "urls#export", as: :export_urls, defaults: { format: :csv }
+
   # URL management routes
   resources :urls do
     resources :sentiment_analyses, only: [ :create ]
   end
-
-  # Bulk analysis route
-  post "urls/bulk_analyze", to: "urls#bulk_analyze", as: :bulk_analyze_urls
 
   # Defines the root path route ("/")
   root "urls#index"
 
   # Reports route
   get "reports", to: "reports#index", as: :reports
+  get "reports/download_pdf", to: "reports#download_pdf", as: :download_reports_pdf, defaults: { format: :pdf }
 end

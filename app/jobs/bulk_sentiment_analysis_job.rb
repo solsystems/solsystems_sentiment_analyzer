@@ -1,8 +1,8 @@
 class BulkSentimentAnalysisJob < ApplicationJob
   queue_as :default
 
-  def perform(session_id)
-    Rails.logger.info "Starting BulkSentimentAnalysisJob with session_id: #{session_id}"
+  def perform
+    Rails.logger.info "Starting BulkSentimentAnalysisJob"
 
     # Get URLs that don't have any sentiment analyses yet
     urls = Url.left_outer_joins(:sentiment_analyses).where(sentiment_analyses: { id: nil })
@@ -23,28 +23,33 @@ class BulkSentimentAnalysisJob < ApplicationJob
       begin
         Rails.logger.info "Analyzing URL #{url.id}: #{url.url}"
 
-        # Create sentiment analysis for this URL
-        sentiment_analysis = url.sentiment_analyses.build
+        # Create sentiment analysis for this URL (replaces any existing analyses)
+        sentiment_analysis = url.create_single_analysis
         sentiment_analysis.analyze_sentiment
         sentiment_analysis.save!
 
         processed_count += 1
         Rails.logger.info "Successfully analyzed URL #{url.id} (#{processed_count}/#{total_urls})"
 
-        # Update progress if we have a session_id to notify
-        if session_id
-          percentage = ((processed_count.to_f / total_urls) * 100).round(1)
-          Rails.logger.info "Broadcasting progress: #{processed_count}/#{total_urls} (#{percentage}%)"
+        # Broadcast progress to all connected clients
+        percentage = ((processed_count.to_f / total_urls) * 100).round(1)
+        Rails.logger.info "Broadcasting progress: #{processed_count}/#{total_urls} (#{percentage}%) - Current URL: #{url.url}"
 
+        begin
           ActionCable.server.broadcast(
-            "bulk_analysis_#{session_id}",
+            "bulk_analysis",
             {
               type: "progress",
               processed: processed_count,
               total: total_urls,
-              percentage: percentage
+              percentage: percentage,
+              current_url: url.url
             }
           )
+          Rails.logger.info "Successfully broadcasted progress update"
+        rescue => e
+          Rails.logger.error "Error broadcasting progress update: #{e.message}"
+          Rails.logger.error e.backtrace.join("\n")
         end
       rescue => e
         Rails.logger.error "Error analyzing URL #{url.id}: #{e.message}"
@@ -54,10 +59,10 @@ class BulkSentimentAnalysisJob < ApplicationJob
     end
 
     # Send completion notification
-    if session_id
-      Rails.logger.info "Broadcasting completion for session_id: #{session_id}"
+    Rails.logger.info "Broadcasting completion"
+    begin
       ActionCable.server.broadcast(
-        "bulk_analysis_#{session_id}",
+        "bulk_analysis",
         {
           type: "complete",
           processed: processed_count,
@@ -65,6 +70,10 @@ class BulkSentimentAnalysisJob < ApplicationJob
           message: "Bulk analysis complete! #{processed_count} URLs analyzed."
         }
       )
+      Rails.logger.info "Successfully broadcasted completion"
+    rescue => e
+      Rails.logger.error "Error broadcasting completion: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
     end
 
     Rails.logger.info "BulkSentimentAnalysisJob completed. Processed #{processed_count}/#{total_urls} URLs"
