@@ -6,3 +6,142 @@
 [dotenv] Set [36mOPENAI_API_KEY[0m
 [dotenv] Loaded [33m.env[0m
   [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='SentimentAnalyzer'*/[0m
+[dotenv] Set [36mOPENAI_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/cable" for ::1 at 2025-07-10 11:21:11 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='SentimentAnalyzer'*/[0m
+  
+ActiveRecord::PendingMigrationError (
+
+Migrations are pending. To resolve this issue, run:
+
+        bin/rails db:migrate
+
+You have 2 pending migrations:
+
+db/migrate/20250623154714_create_urls.rb
+db/migrate/20250623154722_create_sentiment_analyses.rb
+
+
+):
+  
+activerecord (8.0.2) lib/active_record/migration.rb:743:in 'ActiveRecord::Migration.check_pending_migrations'
+activerecord (8.0.2) lib/active_record/migration.rb:660:in 'block (2 levels) in ActiveRecord::Migration::CheckPending#call'
+activesupport (8.0.2) lib/active_support/file_update_checker.rb:85:in 'ActiveSupport::FileUpdateChecker#execute'
+activerecord (8.0.2) lib/active_record/migration.rb:665:in 'block in ActiveRecord::Migration::CheckPending#call'
+activerecord (8.0.2) lib/active_record/migration.rb:657:in 'Thread::Mutex#synchronize'
+activerecord (8.0.2) lib/active_record/migration.rb:657:in 'ActiveRecord::Migration::CheckPending#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/callbacks.rb:31:in 'block in ActionDispatch::Callbacks#call'
+activesupport (8.0.2) lib/active_support/callbacks.rb:100:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.0.2) lib/action_dispatch/middleware/callbacks.rb:30:in 'ActionDispatch::Callbacks#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/executor.rb:16:in 'ActionDispatch::Executor#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in 'ActionDispatch::ActionableExceptions#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/debug_exceptions.rb:31:in 'ActionDispatch::DebugExceptions#call'
+web-console (4.2.1) lib/web_console/middleware.rb:132:in 'WebConsole::Middleware#call_app'
+web-console (4.2.1) lib/web_console/middleware.rb:28:in 'block in WebConsole::Middleware#call'
+web-console (4.2.1) lib/web_console/middleware.rb:17:in 'Kernel#catch'
+web-console (4.2.1) lib/web_console/middleware.rb:17:in 'WebConsole::Middleware#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/show_exceptions.rb:32:in 'ActionDispatch::ShowExceptions#call'
+railties (8.0.2) lib/rails/rack/logger.rb:41:in 'Rails::Rack::Logger#call_app'
+railties (8.0.2) lib/rails/rack/logger.rb:29:in 'Rails::Rack::Logger#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/remote_ip.rb:96:in 'ActionDispatch::RemoteIp#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/request_id.rb:34:in 'ActionDispatch::RequestId#call'
+rack (3.1.16) lib/rack/method_override.rb:28:in 'Rack::MethodOverride#call'
+rack (3.1.16) lib/rack/runtime.rb:24:in 'Rack::Runtime#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/server_timing.rb:61:in 'block in ActionDispatch::ServerTiming#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/server_timing.rb:26:in 'ActionDispatch::ServerTiming::Subscriber#collect_events'
+actionpack (8.0.2) lib/action_dispatch/middleware/server_timing.rb:60:in 'ActionDispatch::ServerTiming#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/executor.rb:16:in 'ActionDispatch::Executor#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/static.rb:27:in 'ActionDispatch::Static#call'
+rack (3.1.16) lib/rack/sendfile.rb:114:in 'Rack::Sendfile#call'
+actionpack (8.0.2) lib/action_dispatch/middleware/host_authorization.rb:143:in 'ActionDispatch::HostAuthorization#call'
+railties (8.0.2) lib/rails/engine.rb:535:in 'Rails::Engine#call'
+puma (6.6.0) lib/puma/configuration.rb:279:in 'Puma::Configuration::ConfigMiddleware#call'
+puma (6.6.0) lib/puma/request.rb:99:in 'block in Puma::Request#handle_request'
+puma (6.6.0) lib/puma/thread_pool.rb:390:in 'Puma::ThreadPool#with_force_shutdown'
+puma (6.6.0) lib/puma/request.rb:98:in 'Puma::Request#handle_request'
+puma (6.6.0) lib/puma/server.rb:472:in 'Puma::Server#process_client'
+puma (6.6.0) lib/puma/server.rb:254:in 'block in Puma::Server#run'
+puma (6.6.0) lib/puma/thread_pool.rb:167:in 'block in Puma::ThreadPool#spawn_thread'
+[dotenv] Set [36mOPENAI_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='SentimentAnalyzer'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.6ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2025-07-10 15:21:24.204690', '2025-07-10 15:21:24.204691') RETURNING "key" /*application='SentimentAnalyzer'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='SentimentAnalyzer'*/[0m
+Migrating to CreateUrls (20250623154714)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='SentimentAnalyzer'*/[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "urls" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "url" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='SentimentAnalyzer'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_urls_on_url" ON "urls" ("url") /*application='SentimentAnalyzer'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250623154714') RETURNING "version" /*application='SentimentAnalyzer'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='SentimentAnalyzer'*/[0m
+Migrating to CreateSentimentAnalyses (20250623154722)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='SentimentAnalyzer'*/[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "sentiment_analyses" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "url_id" integer NOT NULL, "sentiment" varchar, "reasoning" text, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_90f2477fe4"
+FOREIGN KEY ("url_id")
+  REFERENCES "urls" ("id")
+) /*application='SentimentAnalyzer'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_sentiment_analyses_on_url_id" ON "sentiment_analyses" ("url_id") /*application='SentimentAnalyzer'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250623154722') RETURNING "version" /*application='SentimentAnalyzer'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='SentimentAnalyzer'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='SentimentAnalyzer'*/[0m
+[dotenv] Set [36mOPENAI_API_KEY[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/cable" for ::1 at 2025-07-10 11:21:32 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='SentimentAnalyzer'*/[0m
+Started GET "/cable" [WebSocket] for ::1 at 2025-07-10 11:21:32 -0400
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+=== BULK ANALYSIS CHANNEL SUBSCRIBED ===
+Streaming from: bulk_analysis
+Successfully subscribed to bulk_analysis
+BulkAnalysisChannel is streaming from bulk_analysis
+BulkAnalysisChannel is transmitting the subscription confirmation
+Started GET "/urls" for ::1 at 2025-07-10 11:21:34 -0400
+Processing by UrlsController#index as HTML
+  [1m[36mUrl Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "urls" LEFT OUTER JOIN "sentiment_analyses" ON "sentiment_analyses"."url_id" = "urls"."id" WHERE "sentiment_analyses"."id" IS NULL /*action='index',application='SentimentAnalyzer',controller='urls'*/[0m
+  ↳ app/controllers/urls_controller.rb:6:in 'UrlsController#index'
+=== DEBUG: URLs Index ===
+  [1m[36mUrl Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "urls" /*action='index',application='SentimentAnalyzer',controller='urls'*/[0m
+  ↳ app/controllers/urls_controller.rb:10:in 'UrlsController#index'
+Total URLs: 0
+Pending URLs count: 0
+  [1m[36mUrl Count (0.0ms)[0m  [1m[34mSELECT COUNT(DISTINCT "urls"."id") FROM "urls" INNER JOIN "sentiment_analyses" ON "sentiment_analyses"."url_id" = "urls"."id" /*action='index',application='SentimentAnalyzer',controller='urls'*/[0m
+  ↳ app/controllers/urls_controller.rb:12:in 'UrlsController#index'
+URLs with analyses: 0
+  [1m[36mCACHE Url Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "urls" LEFT OUTER JOIN "sentiment_analyses" ON "sentiment_analyses"."url_id" = "urls"."id" WHERE "sentiment_analyses"."id" IS NULL[0m
+  ↳ app/controllers/urls_controller.rb:13:in 'UrlsController#index'
+URLs without analyses: 0
+========================
+  Rendering layout layouts/application.html.erb
+  Rendering urls/index.html.erb within layouts/application
+  [1m[36mUrl Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "urls" LIMIT 1 /*action='index',application='SentimentAnalyzer',controller='urls'*/[0m
+  ↳ app/views/urls/index.html.erb:39
+  [1m[36mCACHE Url Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "urls" LIMIT 1[0m
+  ↳ app/views/urls/index.html.erb:46
+  Rendered urls/index.html.erb within layouts/application (Duration: 8.7ms | GC: 0.0ms)
+Importmap skipped missing path: javascript/application.js
+Importmap skipped missing path: javascript/bulk_analysis.js
+Importmap skipped missing path: javascript/chart.js
+Importmap skipped missing path: javascript/controllers/application.js
+Importmap skipped missing path: javascript/controllers/hello_controller.js
+Importmap skipped missing path: javascript/controllers/index.js
+Importmap skipped missing path: javascript/application.js
+Importmap skipped missing path: javascript/bulk_analysis.js
+Importmap skipped missing path: javascript/chart.js
+Importmap skipped missing path: javascript/controllers/application.js
+Importmap skipped missing path: javascript/controllers/hello_controller.js
+Importmap skipped missing path: javascript/controllers/index.js
+  Rendered layout layouts/application.html.erb (Duration: 12.3ms | GC: 0.0ms)
+Completed 200 OK in 120ms (Views: 14.3ms | ActiveRecord: 1.7ms (6 queries, 2 cached) | GC: 0.0ms)
+
+
+Finished "/cable" [WebSocket] for ::1 at 2025-07-10 11:21:34 -0400
+=== BULK ANALYSIS CHANNEL UNSUBSCRIBED ===
+BulkAnalysisChannel stopped streaming from bulk_analysis
+Started GET "/cable" for ::1 at 2025-07-10 11:21:34 -0400
+Started GET "/cable" [WebSocket] for ::1 at 2025-07-10 11:21:34 -0400
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+=== BULK ANALYSIS CHANNEL SUBSCRIBED ===
+Streaming from: bulk_analysis
+Successfully subscribed to bulk_analysis
+BulkAnalysisChannel is streaming from bulk_analysis
+BulkAnalysisChannel is transmitting the subscription confirmation
