@@ -1,0 +1,47 @@
+# Deploy to these servers.
+servers:
+  web:
+    hosts:
+      - 172.31.17.211  # Replace with your actual server IP
+    labels:
+      traefik.http.routers.sentiment_analyzer.rule: Host(`sa-staging.solsystems.dev`)  # Replace with your domain
+  job:
+    hosts:
+      - 172.31.17.211  # Replace with your actual server IP
+    cmd: bin/jobs
+
+proxy:
+  ssl:
+    certificate_pem: SSL_CERTIFICATE
+    private_key_pem: SSL_PRIVATE_KEY
+  host: sa-staging.solsystems.dev
+
+
+# Inject ENV variables into containers (secrets come from .kamal/secrets-common and .kamal/secrets.staging).
+env:
+  clear:
+    RAILS_ENV: staging
+    RAILS_LOG_LEVEL: debug
+    RAILS_LOG_TO_STDOUT: true
+    WEB_CONCURRENCY: 2
+    JOB_CONCURRENCY: 2
+    DATABASE_NAME: sentiment_analyzer_staging
+    POSTGRES_USER: sentiment_analyzer
+    POSTGRES_HOST: sc-staging.ctnwxbtxzctl.us-east-1.rds.amazonaws.com
+  secret:
+    - DATABASE_URL
+    - RAILS_MASTER_KEY
+    - OPEN_AI_KEY
+
+# Use accessory services
+accessories:
+  redis:
+    image: redis:7-alpine
+    host: 172.31.17.211
+    port: 6379
+    directories:
+      - data:/data
+
+ssh:
+  user: ubuntu
+  keys: [ "~/.ssh/sentiment_analyzer" ]

@@ -1,0 +1,95 @@
+# Name of your application. Used to uniquely configure containers.
+service: sustainable_choice
+
+# Name of the container image.
+image: solsystems/sustainable_choice
+
+# Deploy to these servers.
+servers:
+  web:
+    hosts:
+      - 192.168.1.100  # Replace with your actual server IP
+    labels:
+      traefik.http.routers.sustainable-choice.rule: Host(`your-domain.com`)  # Replace with your domain
+  job:
+    hosts:
+      - 192.168.1.100  # Replace with your actual server IP
+    cmd: bin/jobs
+
+# Enable SSL auto certification via Let's Encrypt
+proxy:
+  ssl: true
+  host: your-domain.com  # Replace with your actual domain
+
+# Credentials for your image host.
+registry:
+  # Use GitHub Container Registry
+  server: ghcr.io
+  username:
+    - GITHUB_TOKEN
+  password:
+    - GITHUB_TOKEN
+
+# Inject ENV variables into containers (secrets come from .kamal/secrets).
+# NOTE: Kamal merges variables under "clear" between the common and destination secrets,
+# but does not merge the "secret" variables. Thus "common" secrets must be defined in the destination secrets file.
+env:
+  secret:
+    - SALESFORCE_PASSWORD
+    - RAILS_MASTER_KEY
+    - SALESFORCE_SECURITY_TOKEN
+    - SALESFORCE_CLIENT_ID
+    - SALESFORCE_CLIENT_SECRET
+    - SALESFORCE_HOST
+  clear:
+    RAILS_LOG_LEVEL: info
+    WEB_CONCURRENCY: 2
+    JOB_CONCURRENCY: 2
+
+    # Email Configuration
+    SMTP_USERNAME: your_smtp_username
+    SMTP_PASSWORD: your_smtp_password
+    SMTP_ADDRESS: smtp.gmail.com
+    SMTP_PORT: 587
+    SMTP_DOMAIN: your-domain.com
+
+# Aliases are triggered with "bin/kamal <alias>"
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+
+# Use a persistent storage volume for Active Storage files
+volumes:
+  - "sustainable_choice_storage:/rails/storage"
+
+# Bridge fingerprinted assets between versions
+asset_path: /rails/public/assets
+
+# Configure the image builder
+builder:
+  arch: arm64
+  args:
+    RUBY_VERSION: 3.4.1
+
+# Use accessory services (secrets come from .kamal/secrets)
+accessories:
+  # db:
+  #   image: postgres:15
+  #   host: 192.168.1.100  # Replace with your actual server IP
+  #   port: "127.0.0.1:5432:5432"
+  #   env:
+  #     clear:
+  #       POSTGRES_DB: sustainable_choice_production
+  #       POSTGRES_USER: sustainable_choice
+  #     secret:
+  #       - POSTGRES_PASSWORD
+  #   directories:
+  #     - data:/var/lib/postgresql/data
+  redis:
+    image: redis:7-alpine
+    host: 192.168.1.100  # Replace with your actual server IP
+    port: 6379
+    directories:
+      - data:/data

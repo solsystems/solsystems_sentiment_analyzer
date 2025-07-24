@@ -1,37 +1,177 @@
+version: '3.8'
+
 services:
+  # Rails Application
   web:
     build:
       context: .
+      dockerfile: Dockerfile
       args:
-        SECRET_KEY_BASE: development_secret_key_base_for_docker_only_change_in_production
+        RUBY_VERSION: 3.4.1
+    container_name: sentiment_analyzer_web
     ports:
-      - "3000:3000"
+      - "3000:80"
     environment:
-      - RAILS_ENV=production
-      - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_ENV=development
       - RAILS_LOG_TO_STDOUT=true
-      - DATABASE_URL=sqlite3:/app/db/production.sqlite3
-      - SECRET_KEY_BASE=development_secret_key_base_for_docker_only_change_in_production
-      - OPENAI_API_KEY=
-      - SELENIUM_REMOTE_URL=http://selenium:4444/wd/hub
+      - RAILS_SERVE_STATIC_FILES=true
+      - DATABASE_URL=postgresql://sentiment_analyzer:sentiment_analyzer@db:5432/sentiment_analyzer_development
+      - REDIS_URL=redis://redis:6379/0
+      - WEB_CONCURRENCY=2
+      - JOB_CONCURRENCY=2
     volumes:
-      - ./db:/app/db
-      - ./storage:/app/storage
-      - ./log:/app/log
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+      - node_modules:/rails/node_modules
+      - storage_data:/rails/storage
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sentiment_analyzer_network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      test: ["CMD", "curl", "-f", "http://localhost:80/up"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 60s
+
+  # Background Jobs
+  jobs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        RUBY_VERSION: 3.4.1
+    container_name: sentiment_analyzer_jobs
+    command: bin/jobs
+    environment:
+      - RAILS_ENV=development
+      - RAILS_LOG_TO_STDOUT=true
+      - DATABASE_URL=postgresql://sentiment_analyzer:sentiment_analyzer@db:5432/sentiment_analyzer_development
+      - REDIS_URL=redis://redis:6379/0
+      - JOB_CONCURRENCY=2
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+      - storage_data:/rails/storage
     depends_on:
-      - selenium
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sentiment_analyzer_network
+    restart: unless-stopped
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: sentiment_analyzer_db
+    environment:
+      - POSTGRES_DB=sentiment_analyzer_development
+      - POSTGRES_USER=sentiment_analyzer
+      - POSTGRES_PASSWORD=sentiment_analyzer
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - sentiment_analyzer_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentiment_analyzer -d sentiment_analyzer_development"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Redis Cache and Session Store
+  redis:
+    image: redis:7-alpine
+    container_name: sentiment_analyzer_redis
+    command: redis-server --appendonly yes --requirepass sentiment_analyzer_redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - sentiment_analyzer_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # MailHog for Email Testing
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: sentiment_analyzer_mailpit_dev
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - sentiment_analyzer_network
+    restart: unless-stopped
+
+  # Adminer for Database Management
+  adminer:
+    image: adminer:latest
+    container_name: sentiment_analyzer_adminer
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=db
+      - ADMINER_DESIGN=pepa-linha-dark
+    depends_on:
+      - db
+    networks:
+      - sentiment_analyzer_network
+    restart: unless-stopped
+
+  # Redis Commander for Redis Management
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: sentiment_analyzer_redis_commander
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379:sentiment_analyzer_redis
+    depends_on:
+      - redis
+    networks:
+      - sentiment_analyzer_network
+    restart: unless-stopped
 
   selenium:
     image: seleniarm/standalone-chromium:latest
     ports:
-      - "4444:4444"
+      - "4444:4444"    
 
 volumes:
-  db_data: 
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  bundle_cache:
+    driver: local
+  node_modules:
+    driver: local
+  storage_data:
+    driver: local
+
+
+
+networks:
+  sentiment_analyzer_network:
+    driver: bridge 
+
+
+

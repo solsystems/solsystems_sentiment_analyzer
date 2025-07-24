@@ -7,7 +7,7 @@ gem "jbuilder"
 gem "yard"
 
 # Database
-gem "sqlite3"
+gem 'pg', '~> 1.1'
 
 # Asset pipeline and frontend
 gem "propshaft"
@@ -22,7 +22,6 @@ gem "csv"
 gem "openai"
 gem "prawn"
 gem "prawn-table"
-gem "selenium-webdriver"
 gem "webdrivers"
 
 # Caching, background jobs, and other Rails features
