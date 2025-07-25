@@ -2669,3 +2669,39 @@ Streaming from: bulk_analysis
 Successfully subscribed to bulk_analysis
 BulkAnalysisChannel is streaming from bulk_analysis
 BulkAnalysisChannel is transmitting the subscription confirmation
+Finished "/cable" [WebSocket] for ::1 at 2025-07-24 13:24:08 -0400
+=== BULK ANALYSIS CHANNEL UNSUBSCRIBED ===
+BulkAnalysisChannel stopped streaming from bulk_analysis
+Started GET "/cable" for ::1 at 2025-07-24 13:26:41 -0400
+Started GET "/cable" [WebSocket] for ::1 at 2025-07-24 13:26:41 -0400
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+=== BULK ANALYSIS CHANNEL SUBSCRIBED ===
+Streaming from: bulk_analysis
+Successfully subscribed to bulk_analysis
+BulkAnalysisChannel is streaming from bulk_analysis
+BulkAnalysisChannel is transmitting the subscription confirmation
+Finished "/cable" [WebSocket] for ::1 at 2025-07-24 15:27:40 -0400
+=== BULK ANALYSIS CHANNEL UNSUBSCRIBED ===
+BulkAnalysisChannel stopped streaming from bulk_analysis
+Started GET "/cable" for ::1 at 2025-07-24 15:28:52 -0400
+Started GET "/cable" [WebSocket] for ::1 at 2025-07-24 15:28:52 -0400
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+=== BULK ANALYSIS CHANNEL SUBSCRIBED ===
+Streaming from: bulk_analysis
+Successfully subscribed to bulk_analysis
+BulkAnalysisChannel is streaming from bulk_analysis
+BulkAnalysisChannel is transmitting the subscription confirmation
+Finished "/cable" [WebSocket] for ::1 at 2025-07-24 21:10:24 -0400
+=== BULK ANALYSIS CHANNEL UNSUBSCRIBED ===
+BulkAnalysisChannel stopped streaming from bulk_analysis
+Started GET "/cable" for ::1 at 2025-07-24 21:12:23 -0400
+Started GET "/cable" [WebSocket] for ::1 at 2025-07-24 21:12:23 -0400
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+=== BULK ANALYSIS CHANNEL SUBSCRIBED ===
+Streaming from: bulk_analysis
+Successfully subscribed to bulk_analysis
+BulkAnalysisChannel is streaming from bulk_analysis
+BulkAnalysisChannel is transmitting the subscription confirmation
+Finished "/cable" [WebSocket] for ::1 at 2025-07-24 22:28:45 -0400
+=== BULK ANALYSIS CHANNEL UNSUBSCRIBED ===
+BulkAnalysisChannel stopped streaming from bulk_analysis
