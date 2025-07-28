@@ -7,7 +7,7 @@ gem "jbuilder"
 gem "yard"
 
 # Database
-gem 'pg', '~> 1.1'
+gem 'pg', '~> 1.6'
 
 # Asset pipeline and frontend
 gem "propshaft"
