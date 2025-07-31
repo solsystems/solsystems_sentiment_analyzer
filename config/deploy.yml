@@ -1,8 +1,8 @@
 # Name of your application. Used to uniquely configure containers.
-service: sustainable_choice
+service: sentiment_analyzer
 
 # Name of the container image.
-image: solsystems/sustainable_choice
+image: solsystems/sentiment_analyzer
 
 # Deploy to these servers.
 servers:
@@ -34,13 +34,6 @@ registry:
 # NOTE: Kamal merges variables under "clear" between the common and destination secrets,
 # but does not merge the "secret" variables. Thus "common" secrets must be defined in the destination secrets file.
 env:
-  secret:
-    - SALESFORCE_PASSWORD
-    - RAILS_MASTER_KEY
-    - SALESFORCE_SECURITY_TOKEN
-    - SALESFORCE_CLIENT_ID
-    - SALESFORCE_CLIENT_SECRET
-    - SALESFORCE_HOST
   clear:
     RAILS_LOG_LEVEL: info
     WEB_CONCURRENCY: 2
@@ -62,7 +55,7 @@ aliases:
 
 # Use a persistent storage volume for Active Storage files
 volumes:
-  - "sustainable_choice_storage:/rails/storage"
+  - "sentiment_analyzer_storage:/rails/storage"
 
 # Bridge fingerprinted assets between versions
 asset_path: /rails/public/assets

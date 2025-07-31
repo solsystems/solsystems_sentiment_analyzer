@@ -44,4 +44,4 @@ accessories:
 
 ssh:
   user: ubuntu
-  keys: [ "~/.ssh/sentiment_analyzer" ]
+  keys: [ "~/.ssh/sustainable_choice" ]
